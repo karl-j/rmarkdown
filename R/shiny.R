@@ -212,14 +212,15 @@ rmarkdown_shiny_server <- function(dir, file, encoding, auto_reload, render_args
       out <- rmd_cached_output(file, encoding)
       output_dest <- out$dest
 
-      # if output is cached, return it directly
-      if (out$cached) {
-        if (nchar(out$resource_folder) > 0) {
-          shiny::addResourcePath(basename(out$resource_folder),
-                                 out$resource_folder)
-        }
-        return(out$shiny_html)
-      }
+      # if output is cached, return it directly - 
+      # Uncomment to enable caching
+#       if (out$cached) {
+#         if (nchar(out$resource_folder) > 0) {
+#           shiny::addResourcePath(basename(out$resource_folder),
+#                                  out$resource_folder)
+#         }
+#         return(out$shiny_html)
+#       }
 
       # ensure destination directory exists
       if (!file.exists(dirname(output_dest))) {
@@ -392,7 +393,8 @@ rmd_cached_output <- function(input, encoding) {
   resource_folder <- ""
 
   # if the file is raw HTML, return it directly
-  if (identical(tolower(tools::file_ext(input)), "htm") ||
+  if (identical(tolower(tools::file_ext(input)), "Rmd") ||
+      identical(tolower(tools::file_ext(input)), "htm") ||
       identical(tolower(tools::file_ext(input)), "html")) {
     return(list(
       cacheable = TRUE,
